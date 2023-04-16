@@ -1,0 +1,30 @@
+[user]
+	name = Tuomas Alanen
+	email = tuomas@alanen.dev
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID0cUJ2Eh6GHPbCjtOKELG3/7OqwRoCCikq+wx5hrXZ3 
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = vim
+	fsmonitor = true
+	pager = cat
+	commentChar = ";"
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[rebase]
+	auto = true
+	autostash = true
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[alias]
+	a = add -p .
+	s = status .
+	d = diff
+	g = instaweb
+	l = log --reverse --color --decorate --oneline
+	ds = diff --cached
+	pending = log main..HEAD --pretty=oneline --abbrev-commit --format='%Cgreen%cr:%Creset %C(auto)%h%Creset %s'
+	count-lines = "! git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+[pull]
+	rebase = true
