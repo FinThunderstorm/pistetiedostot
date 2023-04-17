@@ -60,8 +60,30 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 # Disable smart dashes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
+# Disable automatic capitalization as it’s annoying when typing code
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+# Set highlight color to pink
+defaults write NSGlobalDomain AppleHighlightColor -string "1.000000 0.749020 0.823529"
+
 # # Set background to dark-grey color
 # osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/System/Library/Desktop Pictures/Solid Colors/Stone.png"'
+
+###############################################################################
+# Power saving
+###############################################################################
+
+# Disable machine sleep while charging
+sudo pmset -c sleep 0
+
+# Set machine sleep to 5 minutes on battery
+sudo pmset -b sleep 5
+
+# Sleep the display after 15 minutes
+sudo pmset -a displaysleep 15
+
+# Start screen saver after 3 minutes
+defaults write com.apple.screensaver idleTime -int 3
 
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
@@ -74,11 +96,15 @@ defaults write com.apple.AppleMultitouchTrackpad ActuationStrength -int 0
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
+# Enable tap to click
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+
 ###############################################################################
 # Screen                                                                      #
 ###############################################################################
 
 # Save screenshots to Downloads folder.
+mkdir -p "${HOME}/Screenshots"
 defaults write com.apple.screencapture location -string "${HOME}/Screenshots"
 
 # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
@@ -135,10 +161,18 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 
 # Show the ~/Library folder
-chflags nohidden ~/Library
+chflags nohidden "${HOME}/Library"
 
 # Show the ~/Projects folder
-chflags nohidden ~/Projects
+mkdir -p "${HOME}/Projects"
+chflags nohidden "${HOME}/Projects"
+
+# Expand the following File Info panes:
+# “General”, “Open with”, and “Sharing & Permissions”
+defaults write com.apple.finder FXInfoPanesExpanded -dict \
+	General -bool true \
+	OpenWith -bool true \
+	Privileges -bool true
 
 ###############################################################################
 # Dock, Dashboard, and hot corners                                            #
@@ -178,6 +212,10 @@ defaults write com.apple.dock wvous-tl-modifier -int 0
 ###############################################################################
 # Safari & WebKit                                                             #
 ###############################################################################
+
+# Privacy: don’t send search queries to Apple
+defaults write com.apple.Safari UniversalSearchEnabled -bool false
+defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 
 # Enable the Develop menu and the Web Inspector in Safari
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
@@ -253,6 +291,10 @@ sudo scutil --set ComputerName $NEWHOSTNAME && \
 sudo scutil --set HostName $NEWHOSTNAME && \
 sudo scutil --set LocalHostName $NEWHOSTNAME && \
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $NEWHOSTNAME
+
+# Require password immediately after sleep or screen saver begins
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
 
 ###############################################################################
 # Kill/restart affected applications                                          #
