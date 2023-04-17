@@ -71,20 +71,6 @@ defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 defaults write com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0
 defaults write com.apple.AppleMultitouchTrackpad ActuationStrength -int 0
 
-# # Trackpad: map bottom right corner to right-click (requires restart!)
-# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
-# defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
-# defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
-# defaults write NSGlobalDomain ContextMenuGesture -int 1
-
-# # Disable press-and-hold for keys in favor of key repeat
-# defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-
-# # Set a blazingly fast keyboard repeat rate, and make it happen more quickly.
-# # (The KeyRepeat option requires logging out and back in to take effect.)
-# defaults write NSGlobalDomain InitialKeyRepeat -int 20
-# defaults write NSGlobalDomain KeyRepeat -int 1
-
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
@@ -98,16 +84,13 @@ defaults write com.apple.screencapture location -string "${HOME}/Screenshots"
 # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
 defaults write com.apple.screencapture type -string "png"
 
-# # Disable shadow in screenshots
-# defaults write com.apple.screencapture disable-shadow -bool true
-
 ###############################################################################
 # Finder                                                                      #
 ###############################################################################
 
 # Set Home as the default location for new Finder windows
-defaults write com.apple.finder NewWindowTarget -string "PfLo"
-defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}"
+defaults write com.apple.finder NewWindowTarget -string "PfHm"
+# defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}"
 
 # Do not show icons for hard drives, servers, and removable media on the desktop
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
@@ -124,31 +107,23 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 # Finder: show status bar
 defaults write com.apple.finder ShowStatusBar -bool true
 
+# Finder: show path bar
+defaults write com.apple.finder ShowPathbar -bool true
+
 # Finder: allow text selection in Quick Look
 defaults write com.apple.finder QLEnableTextSelection -bool true
 
-# # Display full POSIX path as Finder window title
-# defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+# Finder: hide tags from sidebar
+defaults write com.apple.Finder ShowRecentTags -bool false
 
 # When performing a search, search the current folder by default
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
-# # Disable the warning when changing a file extension
-# defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-
-# # Enable spring loading for directories
-# defaults write NSGlobalDomain com.apple.springing.enabled -bool true
-
-# # Remove the spring loading delay for directories
-# defaults write NSGlobalDomain com.apple.springing.delay -float 0.1
-
 # Avoid creating .DS_Store files on network volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
-# # Enable snap-to-grid for icons on the desktop and in other icon views
-# /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-# /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-# /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+# Avoid creating .DS_Store files on USB volumes
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # Set the size of icons on the desktop and in other icon views
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist
@@ -162,6 +137,9 @@ defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 # Show the ~/Library folder
 chflags nohidden ~/Library
 
+# Show the ~/Projects folder
+chflags nohidden ~/Projects
+
 ###############################################################################
 # Dock, Dashboard, and hot corners                                            #
 ###############################################################################
@@ -171,12 +149,6 @@ defaults write com.apple.dock tilesize -int 16
 
 # Speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.15
-
-# # Make Dock icons of hidden applications translucent
-# defaults write com.apple.dock showhidden -bool true
-
-# # Enable the 'reduce transparency' option. Save GPU cycles.
-# defaults write com.apple.universalaccess reduceTransparency -bool true
 
 # Hot corners
 # Possible values:
@@ -256,12 +228,31 @@ defaults write com.apple.messageshelper.MessageController SOInputLineSettings -d
 # Disable continuous spell checking
 defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "continuousSpellCheckingEnabled" -bool false
 
-####
-# Misc
-####
+###############################################################################
+# Misc                                                                        #
+###############################################################################
 
 # Prevent Time Machine from Prompting to Use New Hard Drives as Backup Volume
 sudo defaults write /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
+# Change Software Update to check for updates daily, not just once per week
+defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
+
+# Disable global spell checking
+defaults write -g NSAllowContinuousSpellChecking -bool true
+
+# Show seconds in the clock
+sudo defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM HH:mm:ss"
+
+# Set Edge Dev as default browser
+defaults write com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers -array-add '{LSHandlerContentType=public.html;LSHandlerRoleAll=com.microsoft.edgemac.Dev;}'
+
+# Set hostname
+NEWHOSTNAME=${$HOSTNAME:=macbookpro}
+sudo scutil --set ComputerName $NEWHOSTNAME && \
+sudo scutil --set HostName $NEWHOSTNAME && \
+sudo scutil --set LocalHostName $NEWHOSTNAME && \
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $NEWHOSTNAME
 
 ###############################################################################
 # Kill/restart affected applications                                          #

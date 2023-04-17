@@ -1,0 +1,39 @@
+hostname: change-me
+
+homebrew_cask_apps:
+  - 1password-beta
+  - 1password-cli-beta
+  - adobe-acrobat-reader
+  - aerial
+  - alfred
+  - coconutbattery
+  - cyberduck
+  - firefox-developer-edition
+  - font-comic-mono
+  - font-hack-nerd-font
+  - gimp-dev
+  - insomnia
+  - intel-power-gadget
+  - iterm2-beta
+  - maccy
+  - microsoft-edge-dev
+  - microsoft-teams
+  - rectangle
+  - slack-beta
+  - sourcetree
+  - spotify
+  - tunnelblick
+  - visual-studio-code-insiders
+  - zoom
+  - microsoft-office
+  - mactex-no-gui
+  - clementine
+  - turbo-boost-switcher
+  - pdfsam-basic
+  - discord-canary
+  - prusaslicer
+  - messenger
+  - telegram
+  - teamviewer
+  - whatsapp
+  - zotero
