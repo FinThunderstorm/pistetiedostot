@@ -81,13 +81,15 @@ defaults write NSGlobalDomain AppleHighlightColor -string "1.000000 0.749020 0.8
 sudo pmset -c sleep 0
 
 # Set machine sleep to 5 minutes on battery
-sudo pmset -b sleep 5
+sudo pmset -b sleep 20
 
 # Sleep the display after 15 minutes
 sudo pmset -a displaysleep 15
 
 # Start screen saver after 3 minutes
-defaults write com.apple.screensaver idleTime -int 3
+defaults write com.apple.screensaver idleTime -int 2
+
+defaults write com.apple.screensaver modulePath -string "/System/Library/Screen Savers/Aerial.saver"
 
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
@@ -162,7 +164,7 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # Use column view in all Finder windows by default
 # Four-letter codes for the other view modes: `icnv`, `Nlsv`, `clmv`, `Flwv`
-defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+defaults write com.apple.finder FXPreferredViewStyle -string "lsvw"
 
 # Show the ~/Library folder
 chflags nohidden "${HOME}/Library"
@@ -213,6 +215,10 @@ defaults write com.apple.dock wvous-bl-modifier -int 0
 defaults write com.apple.dock wvous-tl-corner -int 0
 defaults write com.apple.dock wvous-tl-modifier -int 0
 
+# Hide recent applications in Dock
+defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.dock recent-apps -bool false
+
 ###############################################################################
 # Safari & WebKit                                                             #
 ###############################################################################
@@ -245,6 +251,7 @@ if [[ "$RUN_AS_ROOT" = true ]]; then
   # been indexed before.
   # Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
   sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+  # TODO: check
 
   # Restart spotlight
   killall mds > /dev/null 2>&1
@@ -276,6 +283,7 @@ defaults write com.apple.messageshelper.MessageController SOInputLineSettings -d
 
 # Prevent Time Machine from Prompting to Use New Hard Drives as Backup Volume
 sudo defaults write /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+# TODO: check
 
 # Change Software Update to check for updates daily, not just once per week
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
@@ -290,11 +298,10 @@ sudo defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM HH:m
 defaults write com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers -array-add '{LSHandlerContentType=public.html;LSHandlerRoleAll=com.microsoft.edgemac.Dev;}'
 
 # Set hostname
-NEWHOSTNAME=${$HOSTNAME:=macbookpro}
-sudo scutil --set ComputerName $NEWHOSTNAME && \
-sudo scutil --set HostName $NEWHOSTNAME && \
-sudo scutil --set LocalHostName $NEWHOSTNAME && \
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $NEWHOSTNAME
+sudo scutil --set ComputerName ${HOSTNAME:=macbookpro} && \
+sudo scutil --set HostName ${HOSTNAME:=macbookpro} && \
+sudo scutil --set LocalHostName ${HOSTNAME:=macbookpro} && \
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string ${HOSTNAME:=macbookpro}
 
 # Require password immediately after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
