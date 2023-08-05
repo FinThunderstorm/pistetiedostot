@@ -3,7 +3,7 @@
 	email = tuomas@alanen.dev
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID0cUJ2Eh6GHPbCjtOKELG3/7OqwRoCCikq+wx5hrXZ3 
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/alanen/.gitignore_global
 	editor = vim
 	fsmonitor = true
 	pager = cat
