@@ -19,8 +19,16 @@
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 [alias]
 	a = add -p .
+        an = add -N .
+        cm = commit -m
+        ca = commit --amend --no-edit
 	s = status .
 	d = diff
+        c = checkout
+        cb = checkout -B
+        b = branch
+        bc = branch --show-current
+        rs = reset --soft HEAD~1
 	g = instaweb
 	l = log --reverse --color --decorate --oneline
 	ds = diff --cached
@@ -28,3 +36,13 @@
 	count-lines = "! git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
 [pull]
 	rebase = true
+[init]
+	defaultBranch = master
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[push]
+	autoSetupRemote = true
