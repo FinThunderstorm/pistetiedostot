@@ -1,2 +1,8 @@
 node_modules
 .DS_Store
+.claude
+
+# Superpowers workflow scratch (specs, plans, SDD ledger) — kept local, not committed
+docs/plans/
+docs/superpowers/
+/.superpowers/
